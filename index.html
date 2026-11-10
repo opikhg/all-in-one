@@ -1,0 +1,272 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>강서시험장 통합 안내 페이지</title>
+
+<script>function gtag(){} /* 보고용 배포: 접속 통계 수집 안 함 */</script>
+
+<style>
+* { box-sizing:border-box; }
+html, body { margin:0; width:100%; min-height:100%; }
+body { font-family:'Pretendard','Malgun Gothic',sans-serif; background:#f4f6f9; }
+
+#main-menu {
+  min-height:100vh; display:flex; justify-content:center; align-items:center;
+  padding:28px 18px;
+}
+.menu-card {
+  width:100%; max-width:620px; background:#fff; border-radius:28px;
+  padding:32px 24px 28px; box-shadow:0 10px 35px rgba(0,0,0,.08);
+}
+.main-title {
+  text-align:center; margin:0; color:#174ea6; font-size:30px;
+  font-weight:800; letter-spacing:-1px; word-break:keep-all;
+}
+.main-subtitle {
+  text-align:center; margin:10px 0 28px; color:#666; font-size:16px;
+  line-height:1.5; word-break:keep-all;
+}
+.menu-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+.menu-btn {
+  min-height:155px; border:0; border-radius:20px; color:#fff; cursor:pointer;
+  padding:20px 15px; box-shadow:0 5px 12px rgba(0,0,0,.12);
+}
+.menu-btn:active { transform:translateY(2px); filter:brightness(.94); }
+.menu-icon { display:block; font-size:42px; margin-bottom:13px; }
+.menu-name { display:block; font-size:21px; font-weight:800; line-height:1.35; word-break:keep-all; }
+.menu-desc { display:block; margin-top:7px; font-size:13px; opacity:.9; line-height:1.4; word-break:keep-all; }
+.menu-1 { background:#1a73e8; }
+.menu-2 { background:#495057; }
+.menu-3 { background:#28a745; }
+.menu-4 { background:#fd7e14; }
+
+
+.menu-section{margin-top:22px;padding:18px;border-radius:18px;border:1px solid #e5eaf0}
+.section-citizen{background:#f5f8fc;border-color:#dce6f3}
+.section-safety{background:#f2f9f5;border-color:#d8ebdf}
+.section-feedback{background:#f8f5fc;border-color:#e7dcf3}
+.section-title{display:flex;align-items:center;gap:9px;margin:0;color:#233447;font-size:18px;line-height:1.4;letter-spacing:-.5px;word-break:keep-all}
+.section-title span{display:inline-flex;align-items:center;justify-content:center;flex:0 0 30px;width:30px;height:30px;border-radius:9px;background:#fff;color:#285b91;font-size:12px;font-weight:900;border:1px solid rgba(40,91,145,.16)}
+.section-desc{margin:7px 0 13px 39px;color:#697785;font-size:12px;line-height:1.5;word-break:keep-all}
+.sub-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.sub-menu-btn{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-width:0;min-height:118px;padding:14px 12px;border:1px solid #e1e7ed;border-radius:13px;background:#fff;color:#263849;cursor:pointer;box-shadow:0 2px 6px rgba(25,50,75,.04)}
+.sub-menu-btn:active,.feedback-link-btn:active{transform:translateY(1px)}
+.sub-menu-icon{font-size:25px;line-height:1.2;margin-bottom:9px}
+.sub-menu-name{font-size:14px;font-weight:800;line-height:1.4;word-break:keep-all}
+.sub-menu-desc{margin-top:5px;color:#788491;font-size:11px;line-height:1.4;word-break:keep-all}
+.feedback-link-btn{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border:1px solid #e4d9f1;border-radius:13px;background:#fff;text-align:left;color:#2e2940;cursor:pointer}
+.feedback-link-btn .sub-menu-icon{margin:0;font-size:27px}
+.feedback-link-copy{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.feedback-link-copy strong{font-size:14px;line-height:1.4}
+.feedback-link-copy small{font-size:11px;color:#7c7189;line-height:1.4}
+.feedback-arrow{font-size:21px;font-weight:800;color:#7852a2}
+@media(max-width:560px){
+  #main-menu{align-items:flex-start;padding:14px 10px}
+  .menu-card{padding:25px 14px 20px;border-radius:22px}
+  .main-title{font-size:24px}
+  .main-subtitle{font-size:13px;margin-bottom:18px}
+  .menu-section{margin-top:14px;padding:13px;border-radius:15px}
+  .section-title{font-size:16px}
+  .section-desc{margin-left:0;font-size:11px}
+  .sub-menu-btn{min-height:108px;padding:12px 10px}
+  .sub-menu-name{font-size:13px}
+}
+
+#app-view { display:none; position:fixed; inset:0; background:#fff; z-index:100; }
+#app-frame { width:100%; height:100%; border:0; display:block; }
+.app-frame { position:absolute; inset:0; width:100%; height:100%; border:0; display:none; background:#fff; }
+#loading-indicator { display:none; position:absolute; inset:0; z-index:120; align-items:center; justify-content:center; flex-direction:column; gap:12px; background:#fff; color:#334155; font-size:15px; }
+.loading-spinner { width:32px; height:32px; border:3px solid #e5e7eb; border-top-color:#1a73e8; border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+#back-main {
+  position:fixed; top:12px; left:12px; z-index:200; display:none;
+  border:0; border-radius:12px; background:rgba(0,0,0,.68); color:#fff;
+  padding:11px 14px; font-size:15px; font-weight:700; cursor:pointer;
+}
+#facility-placeholder {
+  display:none; position:fixed; inset:0; z-index:150; background:#f4f6f9;
+  justify-content:center; align-items:center; padding:25px;
+}
+.placeholder-card {
+  width:100%; max-width:600px; background:#fff; border-radius:24px;
+  padding:45px 25px; text-align:center; box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+.placeholder-card .icon { font-size:64px; }
+.placeholder-card h2 { margin:18px 0 10px; color:#174ea6; }
+.placeholder-card p { color:#666; line-height:1.6; word-break:keep-all; }
+
+@media (max-width:560px) {
+  .menu-grid { grid-template-columns:1fr; }
+  .menu-btn { min-height:125px; }
+  .main-title { font-size:25px; }
+}
+</style>
+</head>
+
+<body>
+<div id="main-menu">
+  <div class="menu-card">
+    <h1 class="main-title">강서시험장 ALL-IN-ONE</h1>
+    <p class="main-subtitle">업무 안내부터 안전운전 콘텐츠, 고객 소리함까지 한번에 확인하세요.</p>
+
+    <section class="menu-section section-citizen">
+      <h2 class="section-title"><span>01</span> 민원업무 연계 정보</h2>
+      <p class="section-desc">민원 처리에 필요한 기준과 준비사항을 확인하세요.</p>
+      <div class="sub-menu-grid">
+        <button class="sub-menu-btn" onclick="openApp('docs','7년 무사고 서류 점검')">
+          <span class="sub-menu-icon">📋</span>
+          <span class="sub-menu-name">7년 무사고 서류 점검</span>
+          <span class="sub-menu-desc">제출 전 서류 자가진단</span>
+        </button>
+        <button class="sub-menu-btn" onclick="openApp('senior','치매검사·고령자 교육 안내')">
+          <span class="sub-menu-icon">🧠</span>
+          <span class="sub-menu-name">고령운전자 안내</span>
+          <span class="sub-menu-desc">치매검사 및 고령자 교육</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="menu-section section-safety">
+      <h2 class="section-title"><span>02</span> 신규 운전자 안전운전 콘텐츠</h2>
+      <p class="section-desc">친숙한 콘텐츠로 교통안전 정보를 만나보세요.</p>
+      <div class="sub-menu-grid">
+        <button class="sub-menu-btn" onclick="openApp('webtoon','교통안전교육 웹툰')">
+          <span class="sub-menu-icon">📖</span>
+          <span class="sub-menu-name">교통안전교육 웹툰</span>
+          <span class="sub-menu-desc">웹툰으로 미리 보는 응시 전 교육</span>
+        </button>
+        <button class="sub-menu-btn" onclick="openApp('driving','운전 성향 테스트')">
+          <span class="sub-menu-icon">🚗</span>
+          <span class="sub-menu-name">운전 성향 테스트</span>
+          <span class="sub-menu-desc">나의 드라이빙 소울 알아보기</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="menu-section section-feedback">
+      <h2 class="section-title"><span>03</span> 김포운전면허센터 고객의견 수렴</h2>
+      <p class="section-desc">고객의 의견을 듣고 서비스 개선에 활용합니다.</p>
+      <button class="feedback-link-btn" onclick="openSurvey()">
+        <span class="sub-menu-icon">💬</span>
+        <span class="feedback-link-copy"><strong>고객의견 수렴 페이지</strong><small>고객만족도 조사 및 의견 남기기</small></span>
+        <span class="feedback-arrow">↗</span>
+      </button>
+    </section>
+  </div>
+</div>
+<div id="app-view">
+  <div id="loading-indicator" role="status" aria-live="polite">
+    <div class="loading-spinner"></div>
+    <div id="loading-text">콘텐츠를 불러오는 중입니다…</div>
+  </div>
+  <button id="back-main" onclick="goMain()">⌂ 메인으로</button>
+  <div id="app-frames"></div>
+</div>
+
+<div id="facility-placeholder">
+  <div class="placeholder-card">
+    <div class="icon">🏢</div>
+    <h2>시험장 시설 안내</h2>
+    <p>현재 시설 안내 콘텐츠를 준비하고 있습니다.<br>완성 후 이 메뉴에서 바로 확인하실 수 있습니다.</p>
+    <button class="menu-btn menu-4" style="min-height:auto; margin-top:15px;" onclick="goMain()">메인으로 돌아가기</button>
+  </div>
+</div>
+
+<script>
+const APP_FILES = {
+  driving: "운전성향테스트.html",
+  docs: "7년무사고_서류점검.html",
+  senior: "고령운전자_치매검사교육.html",
+  webtoon: "교통안전교육_웹툰.html"
+};
+
+const appView = document.getElementById('app-view');
+const appFrames = document.getElementById('app-frames');
+const backMain = document.getElementById('back-main');
+const mainMenu = document.getElementById('main-menu');
+const facilityPlaceholder = document.getElementById('facility-placeholder');
+const loadingIndicator = document.getElementById('loading-indicator');
+const loadingText = document.getElementById('loading-text');
+const loadedApps = {};
+let activeApp = null;
+
+function trackMenu(menuName) {
+  if (typeof gtag === 'function') {
+    gtag('event', 'menu_click', { menu_name: menuName });
+  }
+}
+
+// 메뉴를 처음 열 때만 iframe을 만들고, 다시 방문할 때는 이미 열린 화면을 재사용합니다.
+function openApp(appKey, menuName) {
+  trackMenu(menuName);
+  mainMenu.style.display = 'none';
+  facilityPlaceholder.style.display = 'none';
+  appView.style.display = 'block';
+  backMain.style.display = 'block';
+
+  Object.keys(loadedApps).forEach(key => {
+    loadedApps[key].style.display = 'none';
+  });
+  activeApp = appKey;
+
+  if (loadedApps[appKey]) {
+    loadedApps[appKey].style.display = 'block';
+    loadingIndicator.style.display = 'none';
+    return;
+  }
+
+  loadingText.textContent = menuName + ' 콘텐츠를 불러오는 중입니다…';
+  loadingIndicator.style.display = 'flex';
+
+  const frame = document.createElement('iframe');
+  frame.className = 'app-frame';
+  frame.style.display = 'block'; // 처음 생성한 메뉴 화면을 즉시 표시
+  frame.title = menuName;
+  frame.loading = 'eager';
+  frame.addEventListener('load', () => {
+    if (activeApp === appKey && appView.style.display === 'block') {
+      loadingIndicator.style.display = 'none';
+    }
+  });
+  frame.addEventListener('error', () => {
+    if (activeApp === appKey) {
+      loadingText.textContent = '콘텐츠를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.';
+    }
+  });
+  appFrames.appendChild(frame);
+  loadedApps[appKey] = frame;
+  frame.src = APP_FILES[appKey];
+}
+
+
+function openFacility() {
+  trackMenu('시험장 시설 안내');
+  mainMenu.style.display = 'none';
+  appView.style.display = 'none';
+  backMain.style.display = 'none';
+  facilityPlaceholder.style.display = 'flex';
+}
+
+const SURVEY_URL = "https://tally.so/r/w4j2go"; // 김포운전면허센터 고객의견 수렴 페이지
+function openSurvey() {
+  trackMenu('김포운전면허센터 고객의견 수렴');
+  if (SURVEY_URL.trim()) {
+    window.open(SURVEY_URL, '_blank', 'noopener,noreferrer');
+  } else {
+    alert('고객의견 수렴 페이지 주소가 아직 연결되지 않았습니다. 링크를 설정한 뒤 이용해 주세요.');
+  }
+}
+
+function goMain() {
+  appView.style.display = 'none';
+  loadingIndicator.style.display = 'none';
+  facilityPlaceholder.style.display = 'none';
+  backMain.style.display = 'none';
+  mainMenu.style.display = 'flex';
+}
+</script>
+</body>
+</html>

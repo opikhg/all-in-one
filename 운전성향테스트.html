@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script>function gtag(){} /* 보고용 배포: 접속 통계 수집 안 함 */</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚗 드라이빙 소울 테스트 🚗</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        #test-container { background: white; width: 95%; max-width: 450px; padding: 0; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; overflow: hidden; }
+.content-inner { padding: 30px 20px; } 
+
+        /* 여기에 이 코드를 추가하세요 */
+        h1 { 
+            font-size: 24px;        /* 한 줄에 들어오도록 크기 조절 */
+            font-weight: 800;       /* 제목답게 두껍게 */
+            letter-spacing: -0.5px; /* 글자 간격을 좁혀서 한 줄 확보 */
+            margin: 10px 0 20px 0;  /* 위아래 적당한 간격 */
+            word-break: keep-all;   /* 단어가 잘리지 않게 */
+        }
+        .hidden { display: none; }
+        .main-img { width: 100%; height: 230px; object-fit: cover; background-color: #eee; }
+        .footer-ci { width: 120px; margin-top: 30px; opacity: 0.8; }
+        .progress-bar { width: 100%; height: 6px; background: #eee; border-radius: 10px; margin-bottom: 30px; }
+        .progress { height: 100%; background: #1a73e8; width: 0%; transition: 0.3s; border-radius: 10px; }
+        .question { font-size: 20px; font-weight: 700; margin-bottom: 25px; line-height: 1.5; }
+        #answer-buttons button, .info-select-btn { background: #fff; border: 1.5px solid #ddd; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; margin: 8px 0; font-size: 16px; font-weight: 500; }
+        .info-select-btn.active { border-color: #1a73e8; color: #1a73e8; background: #f0f7ff; font-weight: 700; }
+        .start-btn, .next-info-btn { background: #1a73e8; color: white; border: none; font-size: 18px; font-weight: 700; width: 100%; padding: 16px; border-radius: 12px; cursor: pointer; margin-top: 10px; }
+        .result-title { font-size: 24px; font-weight: 800; color: #1a73e8; margin-bottom: 15px; }
+        .result-img { width: 100%; border-radius: 15px; margin-bottom: 20px; }
+        .sol-box { background: #f8f9fa; padding: 24px; border-radius: 18px; text-align: left; margin-bottom: 15px; border: 1px solid #eee; line-height: 1.7; }
+        .sol-label { display: block; font-weight: 800; font-size: 17px; color: #1a73e8; margin-bottom: 11px; }
+
+        /* 모달 및 상장 스타일 */
+        .pledge-btn {  background: linear-gradient(135deg, #a777e3, #6e8efb) !important; color: white !important; box-shadow: 0 4px 15px rgba(167, 119, 227, 0.4); border: none; width: 100%; padding: 18px; border-radius: 15px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        #cert-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: white; width: 100%; max-width: 380px; border-radius: 40px; overflow: hidden; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.cert-card {
+    /* 기존 배경색과 테두리 관련 CSS는 모두 삭제합니다. */
+    /* background: linear-gradient(...); */
+    /* border-radius: ...; */
+    /* overflow: hidden; */
+    /* position: relative; */
+    
+    padding: 0; /* 이미지가 직접 들어가므로 padding은 0으로 */
+    text-align: center;
+    border-radius: 40px 40px 0 0; /* 이미지 자체에 테두리 효과가 있다면 이 부분도 삭제 가능 */
+    /* box-shadow: 0 5px 15px rgba(0,0,0,0.05); */ /* 이건 유지해도 예뻐요 */
+}
+/* --- 모달 버튼 디자인 (여기서부터 복사해서 교체하세요) --- */
+        .modal-btns { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* 버튼 공통 설정 */
+        .modal-btns button { 
+            padding: 16px; 
+            border-radius: 12px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        /* 1. 공유하기 (보라 그라데이션) */
+        .btn-share {
+            background: linear-gradient(135deg, #a777e3, #8e5ae6); 
+            color: white;
+            border: none;
+        }
+
+        /* 2. 링크 복사 (하늘 그라데이션) */
+        .btn-copy {
+            background: linear-gradient(135deg, #6e8efb, #4a6cf7); 
+            color: white;
+            border: none;
+        }
+
+        /* 3. 마일리지 신청 (금빛 혜택 그라데이션) */
+        .btn-mileage {
+            background: linear-gradient(135deg, #ffdb4d, #ffa500); 
+            color: #5c4000;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+        }
+
+        /* 버튼 누를 때 효과 */
+        .modal-btns button:active {
+            transform: scale(0.97);
+            filter: brightness(95%);
+        }
+        /* --- 여기까지 --- */
+    </style>
+</head>
+<body>
+
+<div id="test-container">
+    <div id="start-page">
+        <img src="start.png" class="main-img">
+        <div class="content-inner">
+            <h1>🚗 드라이빙 소울 테스트 🚗</h1>
+            <p style="color: #666;">도로 위에서 또 다른 당신의 모습, <br>운전대를 잡은 당신은 어떤 성격일까요?</p>
+            <button class="start-btn" onclick="goToInfoPage()">테스트 시작하기</button><br>
+            <img src="logo.JPG" class="footer-ci">
+        </div>
+    </div>
+
+    <div id="info-page" class="hidden">
+        <div class="content-inner">
+            <h2 style="font-size: 20px;">당신에 대해 알려주세요!</h2>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <button class="info-select-btn" onclick="selectInfo('gender', '남성', this)">남성</button>
+                <button class="info-select-btn" onclick="selectInfo('gender', '여성', this)">여성</button>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <button class="info-select-btn" onclick="selectInfo('age', '20대이하', this)">20대 이하</button>
+                <button class="info-select-btn" onclick="selectInfo('age', '30대', this)">30대</button>
+                <button class="info-select-btn" onclick="selectInfo('age', '40대', this)">40대</button>
+                <button class="info-select-btn" onclick="selectInfo('age', '50대', this)">50대</button>
+                <button class="info-select-btn" onclick="selectInfo('age', '60대이상', this)">60대 이상</button>
+            </div>
+            <button class="next-info-btn" style="margin-top:20px;" onclick="submitInfo()">준비 완료!</button>
+        </div>
+    </div>
+
+    <div id="question-page" class="hidden">
+        <div class="content-inner">
+            <div class="progress-bar"><div id="progress" class="progress"></div></div>
+            <div id="question-text" class="question"></div>
+            <div id="answer-buttons"></div>
+        </div>
+    </div>
+
+    <div id="result-page" class="hidden">
+        <div class="content-inner">
+            <p style="font-size: 13px; color: #888; margin-bottom: 5px;">나의 드라이빙 소울은</p>
+            <div id="result-name" class="result-title"></div>
+            <img id="result-image" class="result-img" src="">
+            <div class="sol-box"><span class="sol-label">💡 베스트 드라이버가 되는 법</span><div id="drive-tip"></div></div>
+            <div class="sol-box"><span class="sol-label">⚠️ 꼭 기억할 안전운전 포인트</span><div id="safety-tip"></div></div>
+            <button class="pledge-btn" onclick="openCertModal()">안전운전 약속하고 공유하기</button>
+            <p style="color:#999; cursor:pointer; margin-top:20px;" onclick="location.reload()">🔄 다시 테스트하기</p>
+            <img src="logo.JPG" class="footer-ci">
+        </div>
+    </div>
+</div>
+
+<div id="cert-modal">
+    <div class="modal-content">
+        <div class="cert-card">
+            <img src="safety_award.png" alt="안전운전 상장" style="width:100%; height:auto; display:block;">
+        </div>
+        
+        <div class="modal-btns">
+            <button class="btn-share" onclick="shareResult()">📢 나의 드라이빙 소울 공유하기</button>
+            <button class="btn-copy" onclick="copyLink()">🔗 테스트 링크 복사하기</button>
+            <button class="btn-mileage" onclick="clickMileage()">🎁 착한운전 마일리지 신청하기</button>
+            <p style="text-align:center; color:#999; cursor:pointer; margin-top:5px; font-size:14px;" onclick="closeModal()">닫기</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 질문/결과 데이터는 원본 유지 (코드 길이상 핵심 구조만 표시, 실제론 원본 데이터 사용)
+    const questions = [
+        { q: "주말 드라이브 갈 때, 나는?", a: [{t: "사람 많은 핫플이나 축제로 간다.", s: "E"}, {t: "한적한 외곽이나 나만 아는 명소로 간다.", s: "I"}] },
+        { q: "오늘따라 유독 길이 뻥 뚫렸다면?", a: [{t: "와~ 오늘 운수 좋은데! 즐겁다.", s: "F"}, {t: "왜 안 막히지? 사고 났나? 원인을 생각한다.", s: "T"}] },
+        { q: "내비가 갑자기 모르는 길로 안내한다면?", a: [{t: "오 새로운 길인가? 호기심이 생긴다.", s: "N"}, {t: "가던 데로 가야 하는데... 불안하다.", s: "S"}] },
+        { q: "옆 차가 깜빡이 없이 끼어들면?", a: [{t: "깜짝이야! 내 감정을 먼저 표현한다.", s: "F"}, {t: "미쳤나? 번호판이나 상황부터 살핀다.", s: "T"}] },
+        { q: "단톡방에 드라이브 번개가 올라왔다면?", a: [{t: "오 대박! 누구누구 가? 일단 참전!", s: "E"}, {t: "차 막힐 텐데... 집에서 쉴 생각부터 한다.", s: "I"}] },
+        { q: "앞 차가 너무 느릿느릿 가고 있다면?", a: [{t: "저 차는 무슨 사연이 있나? 상상에 빠진다.", s: "N"}, {t: "아, 연비 떨어지게... 뒤차 흐름을 생각한다.", s: "S"}] },
+        { q: "주차 자리를 다른 차가 가로챈다면?", a: [{t: "너무한 거 아냐? 옆 사람에게 하소연한다.", s: "F"}, {t: "바로 다른 자리는 없는지 해결방법을 찾는다.", s: "T"}] },
+        { q: "목적지에 왔는데 노래가 절정이라면?", a: [{t: "노래가 끝날 때까지 감성을 즐긴다.", s: "N"}, {t: "아까워도 일단 내리고 본다.", s: "S"}] },
+        { q: "주유 경고등에 불이 들어왔을 때?", a: [{t: "아직 좀 더 갈 수 있어. 보이면 들어간다.", s: "P"}, {t: "가장 가까운 주유소를 바로 검색한다.", s: "J"}] }
+    ];
+
+const results = {
+    "EST": { 
+        name: "📍 인간 내비게이션", 
+        img: "image_navi.png", 
+        운전Tip: "<b>정보 과부하를 경계하세요.</b> 경로 이탈에 민감한 성격은 운전대를 꽉 쥐게 만듭니다. '길은 연결되어 있다'는 여유가 필요합니다.", 
+        안전Tip: "<b>[전방주시 태만 주의]</b> 시속 60km 주행 시 내비를 2초만 봐도 33m를 눈 감고 가는 것과 같습니다. 지도는 소리로만 듣고 시선은 도로에 고정하세요." 
+    },
+    "ESF": { 
+        name: "🎤 흥 폭발 드라이버", 
+        img: "image_party.png", 
+        운전Tip: "<b>정속 주행을 잊지 마세요.</b> 신나는 비트를 들으면 나도 모르게 가속 페달을 깊게 밟게 됩니다. 본인도 모르게 규정 속도를 10~20km 초과할지도 몰라요.", 
+        안전Tip: "<b>[청각 사각지대 발생]</b> 큰 음악 소리는 뒤차의 경적이나 긴급차량의 사이렌을 차단합니다. 차 안의 즐거움이 외부의 위험 신호를 가리지 않게 하세요." 
+    },
+    "ENT": { 
+        name: "♟️ 도로 위 전략가", 
+        img: "image_tactician.png", 
+        운전Tip: "<b>예측이 항상 옳지는 않습니다.</b> 가장 빠른 차선으로 옮기는 습관은 피로도를 높이고 타인에게 위협이 될 수 있습니다. 가장 안전한 경로가 가장 빠른 경로입니다.", 
+        안전Tip: "<b>[차선 변경 사고 주의]</b> 잦은 차로 변경은 사고 확률을 2배 이상 높입니다. '빨리 가는 전략'보다 '안전하게 도착하는 전략'이 진짜 고수의 전략입니다." 
+    },
+    "ENF": { 
+        name: "☀️ 인간 햇살 드라이버", 
+        img: "image_sunshine.jpg", 
+        운전Tip: "<b>멀티태스킹은 금물!</b> 교통 흐름을 깨지 않는 정석 주행이 주변 운전자를 더 편하게 합니다. 당신의 친절은 방어운전으로 나타날 때 가장 빛나요.", 
+        안전Tip: "<b>[인지 기능 분산 주의]</b> 동승자와의 대화나 풍경 감상은 뇌의 반응 속도를 늦춥니다. 특히 교차로에서의 사고에 주의하세요." 
+    },
+    "IST": { 
+        name: "🤖 AI 자율주행모드", 
+        img: "image_ai.jpg", 
+        운전Tip: "<b>도로의 유동성을 이해하세요.</b> 법규 준수는 완벽하지만, 주변 흐름보다 너무 느린 주행은 뒤차의 무리한 추월을 유발하는 원인이 됩니다.", 
+        안전Tip: "<b>[방어 운전의 확장]</b> '나는 법을 지키니 괜찮다'는 생각은 위험합니다. 법을 어긴 다른 운전자를 미리 예측하고 피하는 것이 진짜 안전입니다." 
+    },
+    "ISF": { 
+        name: "🕊️ 배려 만점 평화주의자", 
+        img: "image_peace.png", 
+        운전Tip: "<b>예측 가능한 운전자가 되세요.</b> 양보를 하더라도 주변 흐름을 깨지 않는 선에서 단호하게 행동하는 것이 진정한 배려입니다.", 
+        안전Tip: "<b>[착한 운전보다 안전 운전]</b> 뒤차의 눈치가 보여 무리하게 양보하거나, 합류 지점에서 너무 오래 주저하는 것은 오히려 뒤차와의 추돌 위험을 높일 수 있습니다." 
+    },
+    "INT": { 
+        name: "🏁 고독한 아우토반", 
+        img: "image_speed.jpg", 
+        운전Tip: "<b>시야의 폭을 넓히세요.</b> 혼자만의 주행에 몰입할수록 시야각은 좁아집니다. 앞차의 브레이크등뿐만 아니라 그 앞차의 흐름까지 읽어야 합니다.", 
+        안전Tip: "<b>[터널 시야 현상 경계]</b> 속도가 올라갈수록 주변 시야는 흐릿해집니다. 고속도로 합류 지점이나 터널 출구에서 측면 차량을 놓치지 않도록 주의하세요." 
+    },
+    "INF": { 
+        name: "🎧 새벽 공기 수집가", 
+        img: "image_dawn.png", 
+        운전Tip: "<b>청각보다 시각에 불륨을 높이세요.</b> 야간 드라이브는 주간보다 시야가 20%이상 감소합니다. 음악보다 도로 상황에 집중하세요.", 
+        안전Tip: "<b>[감성 브레이크 주의]</b> 야간엔 앞차와의 거리가 실제보다 멀어 보일 수 있습니다. '감성 브레이크'는 금물! 평소보다 안전거리를 1.5배 더 확보하세요." 
+    }
+};
+
+    let currentIdx = 0; let scores = { E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0 };
+    let userInfo = { gender: "", age: "" };
+
+    function goToInfoPage() { document.getElementById('start-page').classList.add('hidden'); document.getElementById('info-page').classList.remove('hidden'); }
+    function selectInfo(t, v, btn) { userInfo[t] = v; const btns = btn.parentElement.querySelectorAll('.info-select-btn'); btns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+    
+    function submitInfo() {
+        if(!userInfo.gender || !userInfo.age) return alert("정보를 모두 선택해주세요!");
+        // ⭐ 원본 통계 코드 유지
+        gtag('event', 'user_info_complete', { 'user_gender': userInfo.gender, 'user_age': userInfo.age });
+        document.getElementById('info-page').classList.add('hidden');
+        document.getElementById('question-page').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('progress').style.width = ((currentIdx / questions.length) * 100) + '%';
+        document.getElementById('question-text').innerText = q.q;
+        const container = document.getElementById('answer-buttons');
+        container.innerHTML = '';
+        q.a.forEach(ans => {
+            const btn = document.createElement('button');
+            btn.innerText = ans.t;
+            btn.onclick = () => { scores[ans.s]++; currentIdx++; if(currentIdx < questions.length) showQuestion(); else showResult(); };
+            container.appendChild(btn);
+        });
+    }
+
+    function showResult() {
+        document.getElementById('question-page').classList.add('hidden');
+        document.getElementById('result-page').classList.remove('hidden');
+        let mbti = (scores.E>=scores.I?'E':'I')+(scores.S>=scores.N?'S':'N')+(scores.T>=scores.F?'T':'F');
+        const res = results[mbti] || results["IST"];
+        // ⭐ 원본 통계 코드 유지
+        gtag('event', 'view_result', { 'test_result': res.name, 'user_gender': userInfo.gender, 'user_age': userInfo.age });
+        document.getElementById('result-name').innerText = res.name;
+        document.getElementById('result-image').src = res.img;
+        document.getElementById('drive-tip').innerHTML = res.운전Tip;
+        document.getElementById('safety-tip').innerHTML = res.안전Tip;
+    }
+
+function openCertModal() {
+    // 글자를 바꾸는 코드(cert-body)는 이미지 대체로 인해 삭제했습니다.
+    document.getElementById('cert-modal').style.display = 'flex';
+}
+    function closeModal() { document.getElementById('cert-modal').style.display = 'none'; }
+
+    async function shareResult() {
+        // ⭐ 원본 통계 이벤트 이름 유지
+        gtag('event', 'click_share_button', { 'test_result': document.getElementById('result-name').innerText });
+        const imgElement = document.getElementById('result-image');
+        try {
+            const response = await fetch(imgElement.src);
+            const blob = await response.blob();
+            const file = new File([blob], 'driving_soul.png', { type: 'image/png' });
+            if (navigator.share) { await navigator.share({ files: [file] }); } else { alert("이미지를 길게 눌러 저장해주세요."); }
+        } catch (e) { alert("공유를 지원하지 않는 환경입니다."); }
+    }
+
+    function copyLink() {
+        // ⭐ 원본 통계 이벤트 이름 유지
+        gtag('event', 'click_copy_link', { 'test_result': document.getElementById('result-name').innerText });
+        const text = `🚗 나의 드라이빙 소울은 [${document.getElementById('result-name').innerText}]!\n지금 확인해보세요! 👇\n${window.location.href}`;
+        navigator.clipboard.writeText(text).then(() => alert("링크가 복사되었습니다!"));
+    }
+
+function clickMileage() {
+    // 📊 구글 통계에 '마일리지 버튼 눌렀음'이라고 신호 보내기
+    gtag('event', 'click_mileage_button', { 
+        'test_result': document.getElementById('result-name').innerText 
+    });
+    
+    // 🔗 실제로 정부 사이트 열어주기
+    window.open('https://www.gov.kr/portal/service/serviceInfo/PTR000050215#none/');
+}
+
+</script>
+</body>
+</html>

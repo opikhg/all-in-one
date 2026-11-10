@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고령운전자 전용 스마트 안내</title>
+    <!-- 캡처 저장을 위한 html2canvas 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: '맑은 고딕', 'Malgun Gothic', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #111;
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-height: 90vh;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .active {
+            display: flex;
+        }
+
+        /* 상단 안내 박스 */
+        .notice-box {
+            background-color: #fff3cd;
+            border: 3px solid #ffc107;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 25px;
+            font-weight: bold;
+            line-height: 1.5;
+            text-align: center;
+            color: #856404;
+            margin-bottom: 25px;
+            word-break: keep-all;
+        }
+
+        .notice-box.blue {
+            background-color: #e8f4f8;
+            border-color: #0056b3;
+            color: #003366;
+        }
+
+        /* 버튼 기본 스타일 */
+        .btn {
+            display: block;
+            width: 100%;
+            background-color: #0056b3;
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: bold;
+            padding: 22px 15px;
+            border: none;
+            border-radius: 14px;
+            text-align: center;
+            text-decoration: none;
+            margin-bottom: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            background-color: #003d82;
+            transform: translateY(2px);
+        }
+
+        .btn-green { background-color: #28a745; }
+        .btn-orange { background-color: #fd7e14; }
+        .btn-purple { background-color: #6f42c1; }
+        .btn-blue { background-color: #0d6efd; }
+        .btn-secondary { background-color: #495057; }
+
+        /* 지역 / 구 선택 버튼 셀렉트 */
+        .selection-title {
+            font-size: 23px;
+            font-weight: bold;
+            margin: 15px 0 10px 0;
+            color: #333;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-select {
+            background-color: #e9ecef;
+            color: #212529;
+            font-size: 23px;
+            font-weight: bold;
+            padding: 16px 10px;
+            border: 2px solid #adb5bd;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-select.selected {
+            background-color: #0056b3;
+            color: white;
+            border-color: #003d82;
+        }
+
+        /* 주소 및 전화번호 표시 카카오 스타일 카드 */
+        .info-card {
+            background-color: #f8f9fa;
+            border: 3px solid #0056b3;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-card-content {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .info-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+        }
+
+        .info-detail {
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 1.6;
+            color: #111;
+            margin-bottom: 10px;
+            word-break: keep-all;
+        }
+
+        .phone-link {
+            color: #d9534f;
+            text-decoration: underline;
+        }
+
+        /* 하부 하단 이동 영역 */
+        .bottom-nav {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
+        }
+
+        .bottom-nav-label {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. 첫 화면 -->
+    <div id="page-home" class="page active">
+        <div>
+            <div class="notice-box">
+                ⚠️ 만 75세 이상은 적성검사 전<br>
+                <b>치매검사</b>와 <b>고령운전자 교육</b>을<br>
+                완료해야 합니다.
+            </div>
+
+            <button class="btn btn-green" onclick="showPage('page-dementia')">
+                🏥 치매검사하기
+            </button>
+
+            <button class="btn btn-orange" onclick="showPage('page-education')">
+                🎓 고령운전자 교육 예약하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. 치매검사하기 페이지 -->
+    <div id="page-dementia" class="page">
+        <div>
+            <div class="notice-box">
+                🏥 치매안심센터를 방문하세요.<br>
+                <span style="font-size: 23px; color: #333;">가까운 치매안심센터를 확인하세요.</span>
+            </div>
+
+            <!-- 1단계: 큰 지역 (숫자 1~8) 선택 -->
+            <div class="selection-title">1. 시 / 도 선택 (큰 지역)</div>
+            <div class="grid-container" id="region-buttons">
+                <!-- JS에서 생성됨 -->
+            </div>
+
+            <!-- 2단계: 세부 구/지역 선택 -->
+            <div id="sub-region-container" style="display: none;">
+                <div class="selection-title">2. 세부 구 / 지역 선택</div>
+                <div class="grid-container" id="sub-region-buttons">
+                    <!-- JS에서 생성됨 -->
+                </div>
+            </div>
+
+            <!-- 3단계: 선택된 상세 정보 카드 -->
+            <div id="info-display" style="display: none;">
+                <div class="info-card">
+                    <div id="capture-area" class="info-card-content">
+                        <div class="info-title" id="center-name">센터 이름</div>
+                        <div class="info-detail">📌 주소:<br><span id="center-address">주소 정보</span></div>
+                        <div class="info-detail">📞 전화번호:<br><span id="center-phone" class="phone-link">전화번호</span></div>
+                    </div>
+                    <button class="btn btn-purple" style="margin-top: 15px; margin-bottom: 0;" onclick="saveAsImage()">
+                        💾 이미지로 저장하기 (갤러리 저장)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 교차 메뉴 -->
+        <div class="bottom-nav">
+            <div class="bottom-nav-label">▼ 다른 메뉴로 이동하기 ▼</div>
+            <button class="btn btn-orange" onclick="showPage('page-education')">
+                🎓 고령운전자 교육 예약하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. 고령운전자 교육 예약하기 페이지 -->
+    <div id="page-education" class="page">
+        <div>
+            <div class="notice-box blue">
+                🏫 강서시험장을 방문하여<br>
+                <b>고령운전자 교육</b>을 수강하세요.<br>
+                <span style="font-size: 20px;">(1회 수강, 소요시간 2시간)</span>
+            </div>
+
+            <!-- 새로 추가된 인터넷 예약 버튼 -->
+            <a href="https://trafficedu.koroad.or.kr:8443/home/course/grayingCourseIntro" target="_blank" class="btn btn-blue">
+                💻 인터넷으로 교육듣기<br>
+                <span style="font-size: 20px; font-weight: normal;">(도로교통공단 교육예약 페이지)</span>
+            </a>
+
+            <a href="tel:15771120" class="btn btn-green">
+                📞 콜센터 전화하기<br>
+                <span style="font-size: 23px;">(1577-1120)</span>
+            </a>
+
+            <a href="tel:0234982114" class="btn btn-orange">
+                📞 교육 부서 연결하기<br>
+                <span style="font-size: 23px;">(02-3498-2114)</span>
+            </a>
+        </div>
+
+        <!-- 하단 교차 메뉴 -->
+        <div class="bottom-nav">
+            <div class="bottom-nav-label">▼ 다른 메뉴로 이동하기 ▼</div>
+            <button class="btn btn-green" onclick="showPage('page-dementia')">
+                🏥 치매검사하기
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 제공해주신 치매안심센터 데이터 구조화
+        const dementiaData = {
+            "1. 서울": [
+                { name: "강서구 치매 안심센터", addr: "서울특별시 강서구 화곡로 371 (등촌동)", tel: "02-3663-0945" },
+                { name: "양천구 치매안심센터", addr: "서울특별시 양천구 신월1동 남부순환로 407 (신월동)", tel: "02-2698-8680" },
+                { name: "구로구 치매안심센터", addr: "서울특별시 구로구 디지털로 243 2층 (구로동, 지하이시티 2층)", tel: "02-2612-7041" },
+                { name: "동작구 치매안심센터", addr: "서울특별시 동작구 남부순환로 2025 (사당동)", tel: "02-598-6088" },
+                { name: "영등포구 치매안심센터", addr: "서울 영등포구 당산로29길 9 (당산동3가)", tel: "02-831-0855" },
+                { name: "관악구 치매안심센터", addr: "서울 관악구 관악로 145 (봉천동, 관악구청)", tel: "02-879-4910" },
+                { name: "금천구 치매안심센터", addr: "서울 금천구 시흥대로123길 11 (독산동, 독산1동주민센터)", tel: "02-3281-9082" }
+            ],
+            "2. 인천": [
+                { name: "광역(부평) 치매안심센터", addr: "인천광역시 부평구 동수로 56 가톨릭대학교 인천성모병원 제3별관 1층", tel: "032-472-2027" },
+                { name: "부평 치매안심센터", addr: "인천 부평구 주부토로 65 (부평동, 부평4동 행정복지센터)", tel: "032-509-1308" },
+                { name: "검단 치매안심센터", addr: "인천광역시 검단구 독정로125번길 12 검단구보건소 3층", tel: "032-718-2320" },
+                { name: "계양 치매안심센터", addr: "인천 계양구 계양문화로 63 (계산동, 계양구보건소)", tel: "032-430-7867" }
+            ],
+            "3. 부천시": [
+                { name: "원미 치매안심센터", addr: "경기 부천시 원미구 길주로 410 (춘의동, 치매안심센터)", tel: "032-625-9840" },
+                { name: "오정 치매안심센터", addr: "경기 부천시 오정구 성오로 172 (오정동, 오정구청)", tel: "032-625-9881" },
+                { name: "소사 치매안심센터", addr: "경기 부천시 소사구 호현로 433 (소사본동, 소사본동행정복지센터)", tel: "032-625-9871" }
+            ],
+            "4. 김포시": [
+                { name: "김포시 치매안심센터", addr: "경기 김포시 사우중로73번길 52 (북변동, 래미안 프라자)", tel: "031-5186-4170" }
+            ],
+            "5. 고양시": [
+                { name: "덕양구 치매안심센터", addr: "경기 고양시 덕양구 은빛로 72 (화정동)", tel: "031-8075-4800" },
+                { name: "일산동구 치매안심센터", addr: "경기 고양시 일산동구 중앙로 1100 (백석동)", tel: "031-8075-4850" },
+                { name: "일산서구 치매안심센터", addr: "경기 고양시 일산서구 일중로 54 (일산동, 일산서구보건소)", tel: "031-8075-4871" }
+            ],
+            "6. 시흥시": [
+                { name: "시흥시 치매안심센터", addr: "경기도 시흥시 호현로 55 (대야동) 시흥보건소 5층", tel: "031-310-6062" }
+            ],
+            "7. 파주시": [
+                { name: "파주시 치매안심센터", addr: "경기 파주시 조리읍 봉천로 68 (봉일천리, 파주시건강증진센터)", tel: "031-940-3740" }
+            ],
+            "8. 광명시": [
+                { name: "광명시 치매안심센터", addr: "경기 광명시 소하로 196 (소하동, 광명노인건강센터)", tel: "02-2680-8530" }
+            ]
+        };
+
+        // 페이지 전환 함수
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // 초기화: 큰 지역 버튼 생성
+        function initRegions() {
+            const container = document.getElementById('region-buttons');
+            container.innerHTML = '';
+            
+            Object.keys(dementiaData).forEach(regionKey => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-select';
+                btn.innerText = regionKey;
+                btn.onclick = () => selectRegion(regionKey, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        // 큰 지역 선택 시 세부 구/지역 표시
+        function selectRegion(regionKey, element) {
+            // 버튼 스타일 설정
+            document.querySelectorAll('#region-buttons .btn-select').forEach(b => b.classList.remove('selected'));
+            element.classList.add('selected');
+
+            const subContainer = document.getElementById('sub-region-container');
+            const subButtons = document.getElementById('sub-region-buttons');
+            const infoDisplay = document.getElementById('info-display');
+            
+            subButtons.innerHTML = '';
+            infoDisplay.style.display = 'none';
+
+            const items = dementiaData[regionKey];
+
+            // 세부 지역이 1개인 경우 (김포, 시흥, 파주, 광명 등)
+            if (items.length === 1) {
+                subContainer.style.display = 'none';
+                displayInfo(items[0]);
+            } else {
+                // 세부 지역이 여러 개개인 경우 (서울, 인천, 부천, 고양 등)
+                subContainer.style.display = 'block';
+                items.forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-select';
+                    btn.innerText = item.name.replace(" 치매안심센터", "").replace(" 치매 안심센터", "");
+                    btn.onclick = () => {
+                        document.querySelectorAll('#sub-region-buttons .btn-select').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        displayInfo(item);
+                    };
+                    subButtons.appendChild(btn);
+                });
+            }
+        }
+
+        // 상세 정보(주소/전화) 표출
+        function displayInfo(item) {
+            document.getElementById('center-name').innerText = item.name;
+            document.getElementById('center-address').innerText = item.addr;
+            
+            const phoneElem = document.getElementById('center-phone');
+            phoneElem.innerText = item.tel;
+            phoneElem.onclick = () => { window.location.href = `tel:${item.tel.replace(/[^0-9]/g, '')}`; };
+
+            document.getElementById('info-display').style.display = 'block';
+            
+            // 화면 자동 스크롤
+            document.getElementById('info-display').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 주소 및 전화번호 큰 글씨 카드 이미지 저장 기능
+        function saveAsImage() {
+            const captureArea = document.getElementById('capture-area');
+            
+            html2canvas(captureArea, { scale: 2 }).then(canvas => {
+                const image = canvas.toDataURL("image/png");
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = `${document.getElementById('center-name').innerText}_안내.png`;
+                link.click();
+                alert('센터 정보가 이미지로 저장되었습니다!\n갤러리(다운로드 폴더)를 확인해주세요.');
+            });
+        }
+
+        // 초기 실행
+        window.onload = function() {
+            initRegions();
+        };
+    </script>
+</body>
+</html>
